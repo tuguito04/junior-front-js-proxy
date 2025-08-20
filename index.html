@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products Store - JavaScript Vanilla</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Added semantic structure and improved accessibility -->
+    <div class="app-container">
+        <header class="app-header" role="banner">
+            <div class="header-content">
+                <h1 class="app-title">
+                    <span class="title-icon">🛍️</span>
+                    Products Store
+                </h1>
+                <p class="app-subtitle">Prueba Técnica - JavaScript Vanilla</p>
+            </div>
+        </header>
+
+        <main class="app-main" role="main">
+            <!-- Improved search and filter section with better UX -->
+            <section class="search-section" aria-label="Búsqueda y filtros">
+                <div class="search-container">
+                    <div class="search-input-group">
+                        <label for="searchInput" class="sr-only">Buscar productos</label>
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            placeholder="Buscar productos..." 
+                            class="search-input"
+                            aria-describedby="search-help"
+                        >
+                        <button id="searchBtn" class="btn btn-primary search-btn" aria-label="Buscar">
+                            <span class="btn-icon">🔍</span>
+                            Buscar
+                        </button>
+                    </div>
+                    <div id="search-help" class="sr-only">Presiona Enter o haz clic en buscar para filtrar productos</div>
+                </div>
+                
+                <div class="filters-container">
+                    <div class="filter-group">
+                        <label for="categorySelect" class="filter-label">Categoría</label>
+                        <select id="categorySelect" class="category-select">
+                            <option value="">Todas las categorías</option>
+                        </select>
+                    </div>
+
+                    <button id="createBtn" class="btn btn-success create-btn">
+                        <span class="btn-icon">➕</span>
+                        Crear Producto
+                    </button>
+                </div>
+            </section>
+
+            <!-- Added proper loading states with better visual feedback -->
+            <section class="content-section">
+                <div id="loadingState" class="loading-state hidden" role="status" aria-live="polite">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Cargando productos...</p>
+                </div>
+
+                <div id="errorState" class="error-state hidden" role="alert" aria-live="assertive">
+                    <div class="error-icon">⚠️</div>
+                    <p id="errorMessage" class="error-message">Error al cargar productos</p>
+                    <button id="retryBtn" class="btn btn-secondary retry-btn">Reintentar</button>
+                </div>
+
+                <!-- Improved products grid with better accessibility -->
+                <div id="productsContainer" class="products-container">
+                    <div id="productsList" class="products-grid" role="grid" aria-label="Lista de productos"></div>
+                </div>
+
+                <!-- Enhanced pagination with better navigation -->
+                <nav id="pagination" class="pagination hidden" role="navigation" aria-label="Navegación de páginas">
+                    <button id="prevBtn" class="btn btn-outline pagination-btn" disabled aria-label="Página anterior">
+                        <span class="btn-icon">←</span>
+                        Anterior
+                    </button>
+                    <span id="pageInfo" class="page-info" aria-live="polite">Página 1 de 1</span>
+                    <button id="nextBtn" class="btn btn-outline pagination-btn" disabled aria-label="Página siguiente">
+                        Siguiente
+                        <span class="btn-icon">→</span>
+                    </button>
+                </nav>
+            </section>
+        </main>
+    </div>
+
+    <!-- Improved modal structure with better accessibility -->
+    <div id="productModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-backdrop" aria-hidden="true"></div>
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2 id="modalTitle" class="modal-title">Detalle del Producto</h2>
+                <button id="closeModal" class="close-btn" aria-label="Cerrar modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </header>
+            <div class="modal-body" id="modalBody">
+                <!-- Contenido del producto se carga dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced create product modal with better form structure -->
+    <div id="createModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="createModalTitle">
+        <div class="modal-backdrop" aria-hidden="true"></div>
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2 id="createModalTitle" class="modal-title">Crear Nuevo Producto</h2>
+                <button id="closeCreateModal" class="close-btn" aria-label="Cerrar modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </header>
+            <div class="modal-body">
+                <form id="createForm" class="product-form" novalidate>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productName" class="form-label">
+                                Nombre del Producto <span class="required">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="productName" 
+                                name="name" 
+                                class="form-input"
+                                required 
+                                aria-describedby="name-error"
+                            >
+                            <div id="name-error" class="field-error hidden" role="alert"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productPrice" class="form-label">
+                                Precio <span class="required">*</span>
+                            </label>
+                            <input 
+                                type="number" 
+                                id="productPrice" 
+                                name="price" 
+                                class="form-input"
+                                step="0.01" 
+                                min="0" 
+                                required
+                                aria-describedby="price-error"
+                            >
+                            <div id="price-error" class="field-error hidden" role="alert"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productCategory" class="form-label">
+                            Categoría <span class="required">*</span>
+                        </label>
+                        <select 
+                            id="productCategory" 
+                            name="category" 
+                            class="form-select"
+                            required
+                            aria-describedby="category-error"
+                        >
+                            <option value="">Seleccionar categoría</option>
+                        </select>
+                        <div id="category-error" class="field-error hidden" role="alert"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productDescription" class="form-label">Descripción</label>
+                        <textarea 
+                            id="productDescription" 
+                            name="description" 
+                            class="form-textarea"
+                            rows="3"
+                            placeholder="Describe las características del producto..."
+                        ></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-success submit-btn">
+                            <span class="btn-icon">✓</span>
+                            Crear Producto
+                        </button>
+                        <button type="button" id="cancelCreate" class="btn btn-outline cancel-btn">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
