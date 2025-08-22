@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products Store - JavaScript Vanilla</title>
+    <title>Products Store - JS Vanilla (Prueba)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <!-- Added semantic structure and improved accessibility -->
     <div class="app-container">
         <header class="app-header" role="banner">
             <div class="header-content">
@@ -23,7 +22,6 @@
         </header>
 
         <main class="app-main" role="main">
-            <!-- Improved search and filter section with better UX -->
             <section class="search-section" aria-label="Búsqueda y filtros">
                 <div class="search-container">
                     <div class="search-input-group">
@@ -58,7 +56,6 @@
                 </div>
             </section>
 
-            <!-- Added proper loading states with better visual feedback -->
             <section class="content-section">
                 <div id="loadingState" class="loading-state hidden" role="status" aria-live="polite">
                     <div class="loading-spinner"></div>
@@ -71,12 +68,10 @@
                     <button id="retryBtn" class="btn btn-secondary retry-btn">Reintentar</button>
                 </div>
 
-                <!-- Improved products grid with better accessibility -->
                 <div id="productsContainer" class="products-container">
                     <div id="productsList" class="products-grid" role="grid" aria-label="Lista de productos"></div>
                 </div>
 
-                <!-- Enhanced pagination with better navigation -->
                 <nav id="pagination" class="pagination hidden" role="navigation" aria-label="Navegación de páginas">
                     <button id="prevBtn" class="btn btn-outline pagination-btn" disabled aria-label="Página anterior">
                         <span class="btn-icon">←</span>
@@ -92,7 +87,6 @@
         </main>
     </div>
 
-    <!-- Improved modal structure with better accessibility -->
     <div id="productModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="modal-backdrop" aria-hidden="true"></div>
         <div class="modal-content">
@@ -103,12 +97,10 @@
                 </button>
             </header>
             <div class="modal-body" id="modalBody">
-                <!-- Contenido del producto se carga dinámicamente -->
-            </div>
+                </div>
         </div>
     </div>
 
-    <!-- Enhanced create product modal with better form structure -->
     <div id="createModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="createModalTitle">
         <div class="modal-backdrop" aria-hidden="true"></div>
         <div class="modal-content">
@@ -152,6 +144,36 @@
                             >
                             <div id="price-error" class="field-error hidden" role="alert"></div>
                         </div>
+                        <div class="form-group">
+                        <label for="productStock" class="form-label">
+                            Stock <span class="required">*</span>
+                        </label>
+                        <input
+                            type="number"
+                            id="productStock"
+                            name="stock"
+                            class="form-input"
+                            min="0"
+                            required
+                            aria-describedby="stock-error"
+                        >
+                        <div id="stock-error" class="field-error hidden" role="alert"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productImage" class="form-label">
+                            URL de la Imagen <span class="required">*</span>
+                        </label>
+                        <input
+                            type="url"
+                            id="productImage"
+                            name="image"
+                            class="form-input"
+                            required
+                            aria-describedby="image-error"
+                        >
+                        <div id="image-error" class="field-error hidden" role="alert"></div>
+                    </div>
                     </div>
                     
                     <div class="form-group">
@@ -195,6 +217,7 @@
         </div>
     </div>
 
-    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/main.js"></script>    
 </body>
 </html>
+
