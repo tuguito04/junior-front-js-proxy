@@ -1,65 +1,52 @@
 // js/api.js
-// Funciones para manejar la lógica de datos (API)
 
-import { MOCK_DATA } from './config.js';
+import {API_CONFIG} from './config.js';
 
-const MOCK_API_DELAY = 1000;
+//Obtiene una lista de productos paginada desde la API con opciones de búsqueda y filtrado.
+export const fetchProducts = async (query = '', category = '', page = 1, pageSize) => {
+    const url = new URL(`${API_CONFIG.API_URL}/products`)
 
-/**
- * Simula la obtención de productos de una API.
- * @param {string} query - El término de búsqueda.
- * @param {string} category - La categoría a filtrar.
- * @returns {Promise<Array<Object>>} Un array de productos filtrados.
- */
-export const fetchProducts = (query = '', category = '') => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            try {
-                let products = MOCK_DATA.products;
-                if (query) {
-                    products = products.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
-                }
-                if (category) {
-                    products = products.filter(p => p.category === category);
-                }
-                resolve(products);
-            } catch (error) {
-                reject(new Error('Error al cargar los productos de prueba.'));
-            }
-        }, MOCK_API_DELAY);
-    });
+    url.searchParams.append('page', page);
+    url.searchParams.append('pageSize', pageSize);
+
+    if (query) {
+        url.searchParams.append('query', query);
+    }
+    if (category) {
+        url.searchParams.append('category', category);        
+    }
+    
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error('Error al cargar los productos de la API.');
+    }
+    return await response.json();
 };
 
-/**
- * Simula la obtención de categorías de una API.
- * @returns {Promise<Array<string>>} Un array de categorías.
- */
-export const fetchCategories = () => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            try {
-                resolve(MOCK_DATA.categories);
-            } catch (error) {
-                reject(new Error('Error al cargar las categorías de prueba.'));
-            }
-        }, MOCK_API_DELAY);
-    });
+//Obtiene las categorías desde la API.
+export const fetchCategories = async () => {
+    const url = `${API_CONFIG.API_URL}/categories`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error('Error al cargar las categorías de la API.');
+    }
+    return await response.json();
+    
 };
 
-/**
- * Simula la creación de un nuevo producto en la "base de datos".
- * @param {Object} newProductData - Los datos del nuevo producto.
- * @returns {Promise<Object>} El producto creado con un ID asignado.
- */
-export const createProduct = (newProductData) => {
-    return new Promise((resolve) => {
-        setTimeout(() => {            
-            const newProduct = {
-                id: MOCK_DATA.products.length + 1,
-                ...newProductData
-            };
-            MOCK_DATA.products.unshift(newProduct); 
-            resolve(newProduct);
-        }, MOCK_API_DELAY);
+//Crea un nuevo producto enviándolo a la API.
+export const createProduct = async (newProductData) => {
+    const url = `${API_CONFIG.API_URL}/products`;
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newProductData)
     });
+    if (!response.ok) {
+        throw new Error('Error al crear el producto.');
+    }
+    return await response.json();
 };

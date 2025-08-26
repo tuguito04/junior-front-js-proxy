@@ -2,7 +2,7 @@
 // Archivo principal de la aplicación
 
 import { fetchProducts, fetchCategories, createProduct } from './api.js';
-import { renderProducts, renderCategories, showLoading, hideLoading, showError, showProductModal, showCreateModal, hideModal, validateForm } from './ui.js';
+import { renderProducts, renderCategories, showLoading, hideLoading, showError, showProductModal, showCreateModal, hideModal, validateForm, showSuccessMessage, showCreateErrorMessage } from './ui.js';
 import { initPaginator, updatePaginator, resetPaginator, getCurrentPage } from './paginator.js';
 import { PAGINATION_CONFIG } from './config.js';
 
@@ -10,7 +10,7 @@ const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 const categorySelect = document.getElementById('categorySelect');
 const createBtn = document.getElementById('createBtn');
-const retryBtn = document.getElementById('retryBtn');
+const retryBtn = document.getElementById('retryBtn'); 
 const productModal = document.getElementById('productModal');
 const createModal = document.getElementById('createModal');
 const closeModalBtn = document.getElementById('closeModal');
@@ -18,32 +18,27 @@ const closeCreateModalBtn = document.getElementById('closeCreateModal');
 const cancelCreateBtn = document.getElementById('cancelCreate');
 const createForm = document.getElementById('createForm'); 
 
-let allProducts = [];
+//Carga y renderiza los productos en la página actual con filtros.
 
-/**
- * Carga y renderiza los productos en la página actual.
- * @param {number} page - La página a cargar.
- */
 const loadAndRenderProducts = async (page = 1) => {
     showLoading();
+
     try {
-        const query = searchInput.value.toLowerCase();
+        const query = searchInput.value;
         const category = categorySelect.value;
-        const filteredProducts = await fetchProducts(query, category);
+        const pagedResponse = await fetchProducts(query, category, page, PAGINATION_CONFIG.PAGE_SIZE);
         
-        allProducts = filteredProducts;
-        
-        const startIndex = (page - 1) * PAGINATION_CONFIG.PAGE_SIZE;
-        const endIndex = startIndex + PAGINATION_CONFIG.PAGE_SIZE;
-        const productsToShow = allProducts.slice(startIndex, endIndex);
+        const productsToShow = pagedResponse.items;
+        const totalItems = pagedResponse.total;
 
         hideLoading();
         renderProducts(productsToShow, showProductModal);
-        updatePaginator(allProducts.length, PAGINATION_CONFIG.PAGE_SIZE);
-
+        updatePaginator(totalItems, PAGINATION_CONFIG.PAGE_SIZE);
+        
     } catch (error) {
-        showError('Error al cargar los productos. Por favor, inténtalo de nuevo.');
+        showError('Error al cargar los productos. Por favor, asegúrate de que el backend esté en ejecución e inténtalo de nuevo.');
         console.error('Error en loadAndRenderProducts:', error);
+        
     }
 };
 
@@ -59,7 +54,6 @@ const handleCreateProduct = async (event) => {
         return; 
     }
 
-    // Obtener los datos del formulario
     const newProductData = {
         name: document.getElementById('productName').value,
         price: parseFloat(document.getElementById('productPrice').value),
@@ -67,21 +61,26 @@ const handleCreateProduct = async (event) => {
         image: document.getElementById('productImage').value,
         category: document.getElementById('productCategory').value,
         description: document.getElementById('productDescription').value,
+        brand: "Unknown"
     };
 
     try {
-        // Simular la creación del producto en la API
         await createProduct(newProductData);
-        hideModal(createModal);
-        // Recargar los productos para mostrar el nuevo
-        resetPaginator();
-        loadAndRenderProducts();
-        // Opcional: mostrar un mensaje de éxito
+        hideLoading();
+        showSuccessMessage(); // Mostrar mensaje de éxito
+        // Retrasar el cierre del modal para que el usuario pueda ver el mensaje
+        setTimeout(() => {
+            hideModal(createModal);
+            resetPaginator();
+            loadAndRenderProducts();
+        }, 2000); // 2 segundos
     } catch (error) {
-        // Manejo de errores en la creación
+        hideLoading();
+        showCreateErrorMessage(); // Mostrar mensaje de error
         console.error('Error al crear el producto:', error);
-        // Podrías mostrar un mensaje de error en el modal
+        
     }
+
 };
 
 const init = async () => {
@@ -106,6 +105,7 @@ const init = async () => {
             handleSearchAndFilter();
         }
     });
+
     categorySelect.addEventListener('change', handleSearchAndFilter);
     createBtn.addEventListener('click', showCreateModal);
     retryBtn.addEventListener('click', () => loadAndRenderProducts(getCurrentPage()));
@@ -119,3 +119,4 @@ const init = async () => {
 
 // Iniciar la aplicación cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', init);
+

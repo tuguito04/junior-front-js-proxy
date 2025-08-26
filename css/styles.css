@@ -512,6 +512,34 @@ body {
   padding: var(--space-6);
 }
 
+/* Estilos para los mensajes de estado */
+.message {
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.message span {
+    font-size: 1.25rem;
+    margin-right: var(--space-3);
+}
+
+.message.success {
+    background-color: color-mix(in srgb, var(--success-color) 15%, var(--white));
+    color: var(--success-hover);
+    border: 1px solid var(--success-color);
+}
+
+.message.error {
+    background-color: color-mix(in srgb, var(--error-color) 15%, var(--white));
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
+}
+
 .product-form {
   display: flex;
   flex-direction: column;
@@ -651,4 +679,3 @@ body {
       grid-template-columns: 1fr;
   }
 }
-

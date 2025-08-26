@@ -111,6 +111,13 @@
                 </button>
             </header>
             <div class="modal-body">
+                <!-- Contenedores para mensajes de éxito y error -->
+                <div id="successMessage" class="message success hidden">
+                    <span>&#10004;</span> Producto creado exitosamente.
+                </div>
+                <div id="errorMessage" class="message error hidden">
+                    <span>&#10006;</span> Hubo un error al crear el producto.
+                </div>
                 <form id="createForm" class="product-form" novalidate>
                     <div class="form-row">
                         <div class="form-group">
