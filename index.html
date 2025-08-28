@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <!-- Contenedor principal de la app -->
     <div class="app-container">
+        <!-- Header de la app -->
         <header class="app-header" role="banner">
             <div class="header-content">
                 <h1 class="app-title">
@@ -21,9 +23,12 @@
             </div>
         </header>
 
+        <!-- Main: sección principal de la app -->
         <main class="app-main" role="main">
+            <!-- Sección de búsqueda y filtros -->
             <section class="search-section" aria-label="Búsqueda y filtros">
                 <div class="search-container">
+                    <!-- Input de búsqueda y botón -->
                     <div class="search-input-group">
                         <label for="searchInput" class="sr-only">Buscar productos</label>
                         <input 
@@ -40,7 +45,8 @@
                     </div>
                     <div id="search-help" class="sr-only">Presiona Enter o haz clic en buscar para filtrar productos</div>
                 </div>
-                
+
+                <!-- Filtros y acción de crear producto -->
                 <div class="filters-container">
                     <div class="filter-group">
                         <label for="categorySelect" class="filter-label">Categoría</label>
@@ -56,22 +62,27 @@
                 </div>
             </section>
 
+            <!-- Sección de contenido: productos y estados -->
             <section class="content-section">
+                <!-- Estado de carga -->
                 <div id="loadingState" class="loading-state hidden" role="status" aria-live="polite">
                     <div class="loading-spinner"></div>
                     <p class="loading-text">Cargando productos...</p>
                 </div>
 
+                <!-- Estado de error -->
                 <div id="errorState" class="error-state hidden" role="alert" aria-live="assertive">
                     <div class="error-icon">⚠️</div>
                     <p id="errorMessage" class="error-message">Error al cargar productos</p>
                     <button id="retryBtn" class="btn btn-secondary retry-btn">Reintentar</button>
                 </div>
 
+                <!-- Contenedor de productos -->
                 <div id="productsContainer" class="products-container">
                     <div id="productsList" class="products-grid" role="grid" aria-label="Lista de productos"></div>
                 </div>
 
+                <!-- Paginación -->
                 <nav id="pagination" class="pagination hidden" role="navigation" aria-label="Navegación de páginas">
                     <button id="prevBtn" class="btn btn-outline pagination-btn" disabled aria-label="Página anterior">
                         <span class="btn-icon">←</span>
@@ -87,6 +98,7 @@
         </main>
     </div>
 
+    <!-- Modal de detalle del producto -->
     <div id="productModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="modal-backdrop" aria-hidden="true"></div>
         <div class="modal-content">
@@ -101,6 +113,7 @@
         </div>
     </div>
 
+    <!-- Modal para crear producto -->
     <div id="createModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="createModalTitle">
         <div class="modal-backdrop" aria-hidden="true"></div>
         <div class="modal-content">
@@ -111,15 +124,17 @@
                 </button>
             </header>
             <div class="modal-body">
-                <!-- Contenedores para mensajes de éxito y error -->
+                <!-- Mensajes de éxito y error -->
                 <div id="successMessage" class="message success hidden">
                     <span>&#10004;</span> Producto creado exitosamente.
                 </div>
                 <div id="errorMessage" class="message error hidden">
                     <span>&#10006;</span> Hubo un error al crear el producto.
                 </div>
+                <!-- Formulario de creación -->
                 <form id="createForm" class="product-form" novalidate>
                     <div class="form-row">
+                        <!-- Nombre del producto -->
                         <div class="form-group">
                             <label for="productName" class="form-label">
                                 Nombre del Producto <span class="required">*</span>
@@ -134,7 +149,7 @@
                             >
                             <div id="name-error" class="field-error hidden" role="alert"></div>
                         </div>
-                        
+                        <!-- Precio -->
                         <div class="form-group">
                             <label for="productPrice" class="form-label">
                                 Precio <span class="required">*</span>
@@ -151,6 +166,7 @@
                             >
                             <div id="price-error" class="field-error hidden" role="alert"></div>
                         </div>
+                        <!-- Stock -->
                         <div class="form-group">
                         <label for="productStock" class="form-label">
                             Stock <span class="required">*</span>
@@ -166,7 +182,7 @@
                         >
                         <div id="stock-error" class="field-error hidden" role="alert"></div>
                     </div>
-                    
+                    <!-- URL de la imagen -->
                     <div class="form-group">
                         <label for="productImage" class="form-label">
                             URL de la Imagen <span class="required">*</span>
@@ -182,7 +198,7 @@
                         <div id="image-error" class="field-error hidden" role="alert"></div>
                     </div>
                     </div>
-                    
+                    <!-- Categoría -->
                     <div class="form-group">
                         <label for="productCategory" class="form-label">
                             Categoría <span class="required">*</span>
@@ -198,7 +214,7 @@
                         </select>
                         <div id="category-error" class="field-error hidden" role="alert"></div>
                     </div>
-                    
+                    <!-- Descripción -->
                     <div class="form-group">
                         <label for="productDescription" class="form-label">Descripción</label>
                         <textarea 
@@ -209,7 +225,7 @@
                             placeholder="Describe las características del producto..."
                         ></textarea>
                     </div>
-                    
+                    <!-- Botones -->
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success submit-btn">
                             <span class="btn-icon">✓</span>

@@ -10,6 +10,8 @@ let currentPage = 1;
 let totalProducts = 0;
 let pageSize = 10;
 
+// inicializar paginador
+// configura eventos de los botones anterior y siguiente
 export const initPaginator = (onPageChangeCallback) => {
     prevBtn.addEventListener('click', () => {
         if (currentPage > 1) {
@@ -26,6 +28,8 @@ export const initPaginator = (onPageChangeCallback) => {
     });
 };
 
+// actualizar paginador
+// actualiza la interfaz y el estado según total de productos
 export const updatePaginator = (total, newPageSize) => {
     totalProducts = total;
     if (newPageSize) pageSize = newPageSize;
@@ -42,9 +46,13 @@ export const updatePaginator = (total, newPageSize) => {
     }
 };
 
+// reiniciar paginador
+// reinicia la página actual a 1 y oculta paginación
 export const resetPaginator = () => {
     currentPage = 1;
     updatePaginator(0);
 };
 
+// obtener página actual
+// devuelve la página actual del paginador
 export const getCurrentPage = () => currentPage;
