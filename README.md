@@ -78,7 +78,7 @@ Incluye estructura organizada por módulos, paginación, manejo de UI y configur
 
 ## 💡 Cómo correr el proyecto
 
-1. Clonar el repositorio o descargar los archivos.
+1. Clonar el repositorio (https://github.com/tuguito04/junior-front-js-proxy.git) o descargar los archivos.
 2. Abrir `index.html` en el navegador (no requiere build ni dependencias).
 3. Asegurarse de que la API esté corriendo en la ruta definida en `config.js`.
 
