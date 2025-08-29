@@ -20,7 +20,7 @@ export const renderProducts = (products, onProductClick) => {
     productsList.innerHTML = '';
 
     if (products.length === 0) {
-        productsList.innerHTML = '<p style="text-align: center; color: var(--gray-500);">No se encontraron productos que coincidan con la búsqueda.</p>';
+        productsList.innerHTML = '<p style="text-align: center; color: var(--gray-500); grid-column: 1 / -1; padding: var(--space-8) 0;">No se encontraron productos que coincidan con la búsqueda.</p>';
         return;        
     }
 
