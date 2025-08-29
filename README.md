@@ -7,17 +7,17 @@ Incluye estructura organizada por módulos, paginación, manejo de UI y configur
 
 ## 📂 Estructura del proyecto
 
-junior-front-js-proxy/
-├─ index.html # Página principal
-├─ css/
-│ └─ styles.css # Estilos globales
-├─ js/
-│ ├─ main.js # Punto de entrada, inicializa la app
-│ ├─ api.js # Conexión con la API (GET, POST, etc.)
-│ ├─ ui.js # Manejo del DOM, renderizado de productos
-│ ├─ paginator.js # Lógica de paginación (navegar entre páginas)
-│ └─ config.js # Configuración (endpoint base de la API, pageSize, etc.)
-└─ README.md # Documentación del proyecto
+- junior-front-js-proxy/
+- ├─ index.html # Página principal
+- ├─ css/
+- │ └─ styles.css # Estilos globales
+- ├─ js/
+- │ ├─ main.js # Punto de entrada, inicializa la app
+- │ ├─ api.js # Conexión con la API (GET, POST, etc.)
+- │ ├─ ui.js # Manejo del DOM, renderizado de productos
+- │ ├─ paginator.js # Lógica de paginación (navegar entre páginas)
+- │ └─ config.js # Configuración (endpoint base de la API, pageSize, etc.)
+- └─ README.md # Documentación del proyecto
 
 ---
 
