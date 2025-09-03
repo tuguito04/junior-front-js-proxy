@@ -93,7 +93,7 @@ export const showError = (message) => {
 export const showProductModal = (product) => {
     modalTitle.textContent = product.name;
     modalBody.innerHTML = `
-        <img src="${product.image}" alt="${product.name}" style="width:100%; height:auto; border-radius:12px; margin-bottom:1rem;" onerror="this.onerror=null;this.src='https://placehold.co/600x400/E5E7EB/9CA3AF?text=No+Imagen';">
+        <img src="${product.image}" alt="${product.name}" style="width:220px; height:220px; border-radius:12px; margin: 0 auto 1rem; display: block;" onerror="this.onerror=null;this.src='https://placehold.co/600x400/E5E7EB/9CA3AF?text=No+Imagen';">
         <p><strong>ID:</strong> ${product.id}</p>
         <p><strong>Precio:</strong> $${parseFloat(product.price).toFixed(2)}</p>
         <p><strong>Stock:</strong> ${product.stock} unidades</p>
@@ -139,37 +139,61 @@ export const hideModal = (modalElement) => {
 };
 
 //Valida el formulario de creación de producto.
+// Evitar "e", "+", "-"
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.addEventListener('keydown', e => {
+            if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault();
+        });
+
+    });
+
+});
+
 export const validateForm = () => {
     let isValid = true;
     const fields = ['productName', 'productPrice', 'productStock', 'productImage', 'productCategory'];
-    
-    // Ocultar todos los mensajes de error
-    fields.forEach(fieldId => {
-        const errorElement = document.getElementById(`${fieldId.replace('product', '').toLowerCase()}-error`);
-        if (errorElement) {
-            errorElement.classList.add('hidden');
-        }
-    });
+
+    // Definir reglas de validación por tipo de input
+    const validationRules = {
+        text: [
+            { check: input => input.validity.valueMissing, msg: 'Este campo es obligatorio.' },
+            { check: input => input.validity.tooShort, msg: input => `Debe tener al menos ${input.minLength} caracteres.` },            
+        ],
+        number: [
+            { check: input => input.validity.valueMissing, msg: 'Este campo es obligatorio.' },
+            { check: input => parseFloat(input.value) < 0, msg: 'El valor no puede ser negativo.' },            
+        ],
+        url: [
+            { check: input => input.validity.valueMissing, msg: 'Este campo es obligatorio.' },
+            { check: input => input.validity.typeMismatch, msg: 'Por favor, introduce una URL válida.' },
+            { check: input => !/^https?:\/\/[\w.-]+(\.[\w\.-]+)+[/#?]?.*$/.test(input.value), 
+              msg: 'Por favor, introduce una URL válida que comience con http:// o https://'
+            },
+        ],
+    };
 
     fields.forEach(fieldId => {
         const input = document.getElementById(fieldId);
         const errorElement = document.getElementById(`${fieldId.replace('product', '').toLowerCase()}-error`);
 
-        if (input.required && !input.value.trim()) {
-            errorElement.textContent = 'Este campo es obligatorio.';
-            errorElement.classList.remove('hidden');
-            isValid = false;
-        } else if (input.type === 'number' && parseFloat(input.value) < 0) {
-            errorElement.textContent = 'El valor no puede ser negativo.';
-            errorElement.classList.remove('hidden');
-            isValid = false;
-        } else if (input.type === 'url' && !input.value.match(/^(http|https):\/\/[^ "]+$/)) {
-             errorElement.textContent = 'Por favor, introduce una URL válida.';
-             errorElement.classList.remove('hidden');
-             isValid = false;
+        // Reset
+        errorElement.textContent = '';
+        errorElement.classList.add('hidden');
+
+        const rules = validationRules[input.type] || validationRules.text;
+        for (let rule of rules) {
+            if (rule.check(input)) {
+                errorElement.textContent = typeof rule.msg === 'function' ? rule.msg(input) : rule.msg;
+                errorElement.classList.remove('hidden');
+                isValid = false;
+                break; // solo mostrar primer error
+            }
         }
+        
     });
 
     return isValid;
 };
+
 
